@@ -31,7 +31,6 @@ num_of_pages = int(input())
 vacancies_list = []
 
 for i in range (1, int(num_of_pages) + 1):
-    print(i)
     params['page'] = i
     response = session.get(url, headers = headers, params = params)
     dom = BeautifulSoup(response.text, 'html.parser')
@@ -54,9 +53,6 @@ for i in range (1, int(num_of_pages) + 1):
 
         salary = salary.replace(' ', '')
 
-        # if salary is None:
-        #     break
-        # else:
         if salary == '0':
             temp = ['0', '0', '0']
         else:
@@ -85,6 +81,7 @@ for i in range (1, int(num_of_pages) + 1):
         vacancy_data['3_salary_max'] = temp[1]
         vacancy_data['4_salary_cur'] = temp[2]
         vacancy_data['5_href'] = href
+        vacancy_data['6_source'] = 'HeadHunder'
 
         for i in vacancy_data:
             try:
