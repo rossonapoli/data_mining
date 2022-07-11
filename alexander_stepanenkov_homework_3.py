@@ -79,8 +79,13 @@ for i in range (int(num_of_pages)):
                     matches = re.findall(regex, salary)
                     temp = [_ for tupl in matches for _ in tupl if _]
 
+            regex_id = r'([0-9]{5,9})'
+
+            object_id = re.findall(regex_id, href)
+            _id = int(''.join(object_id))
+
+            vacancy_data['_id'] = _id
             vacancy_data['1_title'] = title
-            # vacancy_data['salary_all'] = salary
             vacancy_data['2_salary_min'] = temp[0]
             vacancy_data['3_salary_max'] = temp[1]
             vacancy_data['4_salary_cur'] = temp[2]
@@ -115,9 +120,13 @@ for item in mongo_vac.find():
 
 compensation = int(input('\n'+'Введите зарплату в рублях для поиска вакансий: '))
 
-for item in mongo_vac.find({'$or':
-                              [{'2_salary_min': {'$gt': compensation}},
-                               {'2_salary_max': {'$gt': compensation}},
-                               {'3_salary_cur': 'руб.'}
-                               ]}):
+for item in mongo_vac.find({'$and':
+                            [{'$or':
+                                [{'2_salary_min': {'$gt': compensation}},
+                                {'3_salary_max': {'$gt': compensation}}]},
+                            {'4_salary_cur': 'руб'}]
+                            }):
+
     pprint(item)
+
+print()
